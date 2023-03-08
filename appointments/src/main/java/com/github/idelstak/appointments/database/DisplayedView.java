@@ -38,6 +38,14 @@ public class DisplayedView {
         return displayedPaneProperty;
     }
 
+    public DisplayedPane getPane() {
+        return displayedPaneProperty.getValue();
+    }
+
+    public void setPane(DisplayedPane displayedPane) {
+        displayedPaneProperty.setValue(displayedPane);
+    }
+
     public enum DisplayedPane {
         DATABASE_CONNECTION_CHECK_PANE {
             @Override
@@ -70,6 +78,17 @@ public class DisplayedView {
             @Override
             public String getPaneId() {
                 return "signInPane";
+            }
+        },
+        APP_VIEW_PANE {
+            @Override
+            public String getFxmlPath() {
+                return "/fxml/app-view-pane.fxml";
+            }
+
+            @Override
+            public String getPaneId() {
+                return "appViewPane";
             }
         };
 
