@@ -83,8 +83,6 @@ public class DatabaseSettingsPaneController {
         if (notNullAndMoreThanFiveLetters(url)) {
             var uri = URI.create(url.substring(5));
 
-            logUri(uri);
-
             hostTextField.setText(uri.getHost());
             databaseNameTextField.setText(uri.getPath().substring(1));
             databaseURLTextField.setText(url);
@@ -129,35 +127,6 @@ public class DatabaseSettingsPaneController {
 
     private static boolean notNullAndMoreThanFiveLetters(String text) {
         return text != null && text.length() > 5;
-    }
-
-    private static void logUri(URI uri) {
-        LOG.log(
-                Level.INFO,
-                """
-                
-                authority: {0}; 
-                fragment: {1}; 
-                host: {2}; 
-                path: {3}; 
-                port: {4}; 
-                query: {5}; 
-                scheme: {6}; 
-                schemeSpecificPart: {7}; 
-                userInfo: {8}
-                """,
-                new Object[]{
-                    uri.getAuthority(),
-                    uri.getFragment(),
-                    uri.getHost(),
-                    uri.getPath(),
-                    Integer.toString(uri.getPort()),
-                    uri.getQuery(),
-                    uri.getScheme(),
-                    uri.getSchemeSpecificPart(),
-                    uri.getUserInfo()
-                }
-        );
     }
 
 }
