@@ -28,6 +28,7 @@ import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -58,7 +59,8 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
-        var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath());
+        var signInPaneController = new SignInPaneController(Collections.emptyList());
+        var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
 
         mainStackPane
                 .getChildren()
