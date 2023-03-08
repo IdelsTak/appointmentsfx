@@ -34,28 +34,11 @@ import javafx.concurrent.Task;
 
 public class DatabaseConnectionService extends Service<Void> {
 
-    private static final Logger LOG = Logger.getLogger(DatabaseConnectionService.class.getName());
-
-    private Task<Void> createDatabaseConnectionTask() {
-        var databaseConnectionTask = new DatabaseConnectionTask();
-
-        databaseConnectionTask
-                .messageProperty()
-                .addListener((observable, oldMessage, newMessage) -> {
-                    if (newMessage == null || newMessage.isBlank()) {
-                        databaseConnectionStatusProperty.setValue(SUCCESSFUL);
-                    } else {
-                        databaseConnectionStatusProperty.setValue(FAILED);
-                    }
-                });
-
-        return databaseConnectionTask;
-    }
-
     public enum DatabaseConnectionStatus {
         SUCCESSFUL, FAILED;
     }
 
+    private static final Logger LOG = Logger.getLogger(DatabaseConnectionService.class.getName());
     private final ObjectProperty<DatabaseConnectionStatus> databaseConnectionStatusProperty;
     private final DatabaseConnectionPreferences databaseConnectionPreferences;
 
@@ -97,6 +80,22 @@ public class DatabaseConnectionService extends Service<Void> {
         return createDatabaseConnectionTask();
     }
 
+    private Task<Void> createDatabaseConnectionTask() {
+        var databaseConnectionTask = new DatabaseConnectionTask();
+
+        databaseConnectionTask
+                .messageProperty()
+                .addListener((observable, oldMessage, newMessage) -> {
+                    if (newMessage == null || newMessage.isBlank()) {
+                        databaseConnectionStatusProperty.setValue(SUCCESSFUL);
+                    } else {
+                        databaseConnectionStatusProperty.setValue(FAILED);
+                    }
+                });
+
+        return databaseConnectionTask;
+    }
+
     private class DatabaseConnectionTask extends Task<Void> {
 
         @Override
@@ -109,7 +108,7 @@ public class DatabaseConnectionService extends Service<Void> {
             updateProgress(-1L, 1L);
 
             try {
-                Thread.sleep(2000L);
+                Thread.sleep(2_000L);
             } catch (InterruptedException ex) {
                 cancel();
             }
