@@ -24,6 +24,9 @@
 package com.github.idelstak.appointments.database;
 
 import static com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus.FAILED;
+import static com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus.SUCCESSFUL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
@@ -31,16 +34,30 @@ import javafx.concurrent.Task;
 
 public class DatabaseConnectionService extends Service<Void> {
 
+    private static final Logger LOG = Logger.getLogger(DatabaseConnectionService.class.getName());
+
     public enum DatabaseConnectionStatus {
         SUCCESSFUL, FAILED;
     }
 
     private final ObjectProperty<DatabaseConnectionStatus> databaseConnectionStatusProperty;
     private final DatabaseConnectionPreferences databaseConnectionPreferences;
+    private final DatabaseConnectionTask databaseConnectionTask;
 
     public DatabaseConnectionService(DatabaseConnectionPreferences databaseConnectionPreferences) {
-        databaseConnectionStatusProperty = new SimpleObjectProperty<>(FAILED);
         this.databaseConnectionPreferences = databaseConnectionPreferences;
+        databaseConnectionTask = new DatabaseConnectionTask();
+        databaseConnectionStatusProperty = new SimpleObjectProperty<>(FAILED);
+
+        databaseConnectionTask
+                .messageProperty()
+                .addListener((observable, oldMessage, newMessage) -> {
+                    if (newMessage == null || newMessage.isBlank()) {
+                        databaseConnectionStatusProperty.setValue(SUCCESSFUL);
+                    } else {
+                        databaseConnectionStatusProperty.setValue(FAILED);
+                    }
+                });
     }
 
     public ObjectProperty<DatabaseConnectionStatus> getDatabaseConnectionStatusProperty() {
@@ -59,15 +76,29 @@ public class DatabaseConnectionService extends Service<Void> {
         return databaseConnectionPreferences.getPassword();
     }
 
+    public void setDatabaseURL(String url) {
+        databaseConnectionPreferences.setDatabaseURL(url);
+    }
+
+    public void setUsername(String username) {
+        databaseConnectionPreferences.setUsername(username);
+    }
+
+    public void setPassword(char[] password) {
+        databaseConnectionPreferences.setPassword(password);
+    }
+
     @Override
     protected Task<Void> createTask() {
-        return new DatabaseConnectionTask();
+        return databaseConnectionTask;
     }
 
     private class DatabaseConnectionTask extends Task<Void> {
 
         @Override
         protected Void call() throws Exception {
+            LOG.log(Level.INFO, "Starting database connection task...");
+
             var databaseConnection = new DatabaseConnection(databaseConnectionPreferences);
 
             updateTitle(String.format("Connecting to database %s...", databaseConnectionPreferences.getDatabaseURL()));
