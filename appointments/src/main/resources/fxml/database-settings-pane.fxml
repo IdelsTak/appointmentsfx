@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="databaseSettingsPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="databaseSettingsPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 1.2em;" text="Database Connection Settings">
          <padding>
@@ -72,12 +72,12 @@
       </HBox>
       <VBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
          <children>
-            <Label fx:id="connectionStatusLabel" maxWidth="1.7976931348623157E308" wrapText="true">
+            <Label fx:id="connectionStatusLabel" maxWidth="1.7976931348623157E308" style="-fx-font-size: 0.9em; -fx-font-weight: bold;" wrapText="true">
                <padding>
                   <Insets bottom="6.0" left="12.0" top="6.0" />
                </padding>
             </Label>
-            <Label fx:id="connectionErrorStatusLabel" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="80.0" style="-fx-font-size: 0.8em;" wrapText="true">
+            <Label fx:id="connectionErrorStatusLabel" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="80.0" style="-fx-font-size: 0.8em; -fx-text-fill: red;" wrapText="true">
                <padding>
                   <Insets left="12.0" />
                </padding>
