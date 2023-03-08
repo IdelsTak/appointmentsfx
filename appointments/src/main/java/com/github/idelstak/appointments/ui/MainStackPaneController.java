@@ -26,9 +26,11 @@ package com.github.idelstak.appointments.ui;
 import com.github.idelstak.appointments.database.DatabaseConnectionService;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
+import com.github.idelstak.appointments.signin.Credentials;
+import com.github.idelstak.appointments.signin.SignInService;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -59,7 +61,7 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
-        var signInPaneController = new SignInPaneController(Collections.emptyList());
+        var signInPaneController = new SignInPaneController(new SignInService(List.of(new Credentials("admin", "admin".toCharArray()))));
         var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
 
         mainStackPane
