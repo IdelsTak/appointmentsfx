@@ -24,6 +24,7 @@
 package com.github.idelstak.appointments.ui;
 
 import com.github.idelstak.appointments.database.DisplayedView;
+import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignInService;
 import com.github.idelstak.appointments.signin.SignInService.SignInStatus;
@@ -32,12 +33,14 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import static org.hamcrest.CoreMatchers.equalTo;
 import org.hamcrest.MatcherAssert;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import org.testfx.assertions.api.Assertions;
 
 public class SignInPaneControllerTest extends ApplicationWithSetStageTest {
 
     private static final SignInService SIGN_IN_SERVICE = new SignInService(List.of(new Credentials("admin", "admin".toCharArray())));
+    private static final DisplayedView DISPLAYED_VIEW = new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE);
 
     public SignInPaneControllerTest() {
         super(createRoot());
@@ -89,12 +92,25 @@ public class SignInPaneControllerTest extends ApplicationWithSetStageTest {
 
         MatcherAssert.assertThat(SIGN_IN_SERVICE.getSignInStatusProperty().get(), equalTo(SignInStatus.SIGNED_IN));
     }
+    
+    @Test
+    public void shows_main_appViewPane_when_sign_in_is_successful() throws Exception {
+        doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
+        doubleClickOn("#passwordField", MouseButton.PRIMARY).write("admin");
+
+        clickOn("#signInButton", MouseButton.PRIMARY);
+        
+        sleep(3_000L);
+        
+        assertThat(DISPLAYED_VIEW.getPane(), equalTo(DisplayedPane.APP_VIEW_PANE));
+    }
 
     private static Parent createRoot() {
         var fxmlPath = DisplayedView.DisplayedPane.SIGN_IN_PANE.getFxmlPath();
-        var controller = new SignInPaneController(SIGN_IN_SERVICE);
+        var controller = new SignInPaneController(SIGN_IN_SERVICE, DISPLAYED_VIEW);
 
         return (Parent) FxmlWithControllerLoader.load(fxmlPath, controller);
     }
+    
 
 }
