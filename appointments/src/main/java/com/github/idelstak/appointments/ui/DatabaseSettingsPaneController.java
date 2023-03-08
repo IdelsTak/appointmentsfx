@@ -102,7 +102,15 @@ public class DatabaseSettingsPaneController {
                 );
     }
 
-    private void logUri(URI uri) {
+    private void updateURL(String hostName, String databaseName) {
+        databaseURLTextField.setText(String.format("jdbc:mysql://%s/%s", hostName, databaseName));
+    }
+
+    private static boolean notNullAndMoreThanFiveLetters(String text) {
+        return text != null && text.length() > 5;
+    }
+
+    private static void logUri(URI uri) {
         LOG.log(
                 Level.INFO,
                 """
@@ -131,11 +139,4 @@ public class DatabaseSettingsPaneController {
         );
     }
 
-    private void updateURL(String hostName, String databaseName) {
-        databaseURLTextField.setText(String.format("jdbc:mysql://%s/%s", hostName, databaseName));
-    }
-
-    private static boolean notNullAndMoreThanFiveLetters(String text) {
-        return text != null && text.length() > 5;
-    }
 }
