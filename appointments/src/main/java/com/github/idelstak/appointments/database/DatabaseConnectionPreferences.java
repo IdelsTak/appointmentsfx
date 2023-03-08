@@ -34,7 +34,11 @@ public class DatabaseConnectionPreferences {
     private final Preferences preferences;
 
     public DatabaseConnectionPreferences() {
-        preferences = Preferences.userNodeForPackage(getClass());
+        this(Preferences.userNodeForPackage(DatabaseConnectionPreferences.class));
+    }
+
+    public DatabaseConnectionPreferences(Preferences preferences) {
+        this.preferences = preferences;
     }
 
     public String getDatabaseURL() {
