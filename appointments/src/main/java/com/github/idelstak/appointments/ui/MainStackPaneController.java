@@ -53,10 +53,11 @@ public class MainStackPaneController {
     }
 
     @FXML
-    public void initialize() throws IOException {
+    protected void initialize() throws IOException {
         var databaseCheckProgressPaneController = new DatabaseCheckProgressPaneController(databaseConnectionService, displayedView);
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
-        var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath());
+        var databaseSettingsPaneController = new DatabaseSettingsPaneController();
+        var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
 
         mainStackPane
                 .getChildren()
