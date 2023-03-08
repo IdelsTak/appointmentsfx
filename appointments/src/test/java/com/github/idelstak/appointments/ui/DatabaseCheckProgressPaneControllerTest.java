@@ -27,6 +27,7 @@ import com.github.idelstak.appointments.database.DatabaseConnectionPreferences;
 import com.github.idelstak.appointments.database.DatabaseConnectionService;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
+import java.util.prefs.Preferences;
 import javafx.scene.Parent;
 import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseButton;
@@ -42,8 +43,8 @@ public class DatabaseCheckProgressPaneControllerTest extends ApplicationWithSetS
     private static final DisplayedView displayedView;
 
     static {
-        databaseConnectionPreferences = new DatabaseConnectionPreferences();
-        databaseConnectionPreferences.setUsername("qwerty");
+        databaseConnectionPreferences = new DatabaseConnectionPreferences(Preferences.userNodeForPackage(DatabaseCheckProgressPaneControllerTest.class));
+        databaseConnectionPreferences.setUsername("abcd");
         databaseConnectionPreferences.setPassword("password".toCharArray());
         databaseConnectionPreferences.setDatabaseURL("jdbc:mysql://localhost:3306/client_schedule");
         
