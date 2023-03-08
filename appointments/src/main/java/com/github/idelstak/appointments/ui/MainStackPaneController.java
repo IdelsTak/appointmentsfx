@@ -24,13 +24,12 @@
 package com.github.idelstak.appointments.ui;
 
 import com.github.idelstak.appointments.database.DatabaseConnectionService;
+import com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
-import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignInService;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -49,8 +48,13 @@ public class MainStackPaneController {
     private StackPane mainStackPane;
     private final DatabaseConnectionService databaseConnectionService;
     private final DisplayedView displayedView;
+    private final SignInService signInService;
 
-    public MainStackPaneController(DatabaseConnectionService databaseConnectionService, DisplayedView displayedView) {
+    public MainStackPaneController(
+            DatabaseConnectionService databaseConnectionService,
+            SignInService signInService,
+            DisplayedView displayedView) {
+        this.signInService = signInService;
         this.databaseConnectionService = databaseConnectionService;
         this.displayedView = displayedView;
     }
@@ -61,19 +65,19 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
-        var signInService = new SignInService(List.of(new Credentials("admin", "admin".toCharArray())));
-        var signInPaneController = new SignInPaneController(signInService);
+        var signInPaneController = new SignInPaneController(signInService, displayedView);
         var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
+        var appViewPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.APP_VIEW_PANE.getFxmlPath());
 
         mainStackPane
                 .getChildren()
-                .addAll(checkDatabaseProgressPane, databaseSettingsPane, signInPane);
+                .addAll(checkDatabaseProgressPane, databaseSettingsPane, signInPane, appViewPane);
 
         databaseConnectionService
                 .getDatabaseConnectionStatusProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    if (newValue == DatabaseConnectionService.DatabaseConnectionStatus.SUCCESSFUL) {
-                        displayedView.getDisplayedPaneProperty().set(DisplayedPane.SIGN_IN_PANE);
+                    if (newValue == DatabaseConnectionStatus.SUCCESSFUL) {
+                        displayedView.setPane(DisplayedPane.SIGN_IN_PANE);
                     }
                 });
 
@@ -83,7 +87,7 @@ public class MainStackPaneController {
                     updateDisplayedPane(newValue);
                 });
 
-        updateDisplayedPane(displayedView.getDisplayedPaneProperty().get());
+        updateDisplayedPane(displayedView.getPane());
     }
 
     private void updateDisplayedPane(DisplayedPane displayedPane) {
