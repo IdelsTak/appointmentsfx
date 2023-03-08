@@ -74,4 +74,9 @@ public class Credentials {
         return Arrays.equals(this.password, other.password);
     }
 
+    @Override
+    public String toString() {
+        return "Credentials{" + "username=" + username + '}';
+    }
+
 }
