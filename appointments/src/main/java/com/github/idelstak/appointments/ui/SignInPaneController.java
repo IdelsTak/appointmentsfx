@@ -23,16 +23,16 @@
  */
 package com.github.idelstak.appointments.ui;
 
+import com.github.idelstak.appointments.database.DisplayedView;
+import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignInService;
 import com.github.idelstak.appointments.signin.SignInService.SignInStatus;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -63,9 +63,11 @@ public class SignInPaneController {
     private TextField userNameTextField;
 
     private final SignInService signInService;
+    private final DisplayedView displayedView;
 
-    public SignInPaneController(SignInService signInService) {
+    public SignInPaneController(SignInService signInService, DisplayedView displayedView) {
         this.signInService = signInService;
+        this.displayedView = displayedView;
     }
 
     @FXML
@@ -88,5 +90,16 @@ public class SignInPaneController {
         var passwordText = passwordField.getText();
 
         signInService.check(new Credentials(userNameTextField.getText(), passwordText == null ? new char[]{} : passwordText.toCharArray()));
+
+        signInService.setOnSucceeded(stateEvent -> {
+            var optionalCredentials = (Optional<Credentials>) stateEvent.getSource().getValue();
+
+            optionalCredentials
+                    .ifPresent(credentials -> {
+                        displayedView
+                                .getDisplayedPaneProperty()
+                                .setValue(DisplayedPane.APP_VIEW_PANE);
+                    });
+        });
     }
 }
