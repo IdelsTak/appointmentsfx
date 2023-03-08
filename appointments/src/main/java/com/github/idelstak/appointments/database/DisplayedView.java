@@ -60,6 +60,17 @@ public class DisplayedView {
             public String getPaneId() {
                 return "databaseSettingsPane";
             }
+        },
+        SIGN_IN_PANE {
+            @Override
+            public String getFxmlPath() {
+                return "/fxml/sign-in-pane.fxml";
+            }
+
+            @Override
+            public String getPaneId() {
+                return "signInPane";
+            }
         };
 
         public abstract String getFxmlPath();
