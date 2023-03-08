@@ -34,6 +34,7 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseButton;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -166,6 +167,34 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
         var connectionErrorStatusLabel = (Labeled) sleep(3_000L).lookup("#connectionErrorStatusLabel").query();
 
         Assertions.assertThat(connectionErrorStatusLabel).matches(node -> !node.isVisible());
+    }
+    
+    @Test
+    public void connectionStatusLabel_shows_success_message_when_connection_test_succeeds() throws Exception {
+        doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
+        doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
+        doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
+        doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("password");
+
+        clickOn("#testConnectionButton", MouseButton.PRIMARY);
+
+        var connectionStatusLabel = (Labeled) sleep(3_000L).lookup("#connectionStatusLabel").query();
+
+        Assertions.assertThat(connectionStatusLabel).hasText("Connected to database.");
+    }
+    
+    @Test
+    public void connectionStatusLabel_shows_failure_message_when_connection_test_fails() throws Exception {
+        doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
+        doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
+        doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
+        doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("bad-password");
+
+        clickOn("#testConnectionButton", MouseButton.PRIMARY);
+
+        var connectionStatusLabel = (Labeled) sleep(3_000L).lookup("#connectionStatusLabel").query();
+
+        Assertions.assertThat(connectionStatusLabel).hasText("Connection to database failed.");
     }
     
     @Test
