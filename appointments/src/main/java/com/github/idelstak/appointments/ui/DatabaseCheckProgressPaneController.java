@@ -54,7 +54,7 @@ public class DatabaseCheckProgressPaneController {
     }
 
     @FXML
-    public void initialize() {
+    protected void initialize() {
         databaseConnectionStatusLabel.textProperty().bind(databaseConnectionService.titleProperty());
         databaseConnectionCheckProgressIndicator.progressProperty().bind(databaseConnectionService.progressProperty());
         databaseConnectionCheckProgressIndicator.visibleProperty().bind(databaseConnectionService.runningProperty());
@@ -71,7 +71,7 @@ public class DatabaseCheckProgressPaneController {
     }
 
     @FXML
-    public void showDatabaseSettingsPane(ActionEvent event) {
+    protected void showDatabaseSettingsPane(ActionEvent event) {
         displayedView
                 .getDisplayedPaneProperty()
                 .setValue(DisplayedPane.DATABASE_SETTINGS_PANE);
