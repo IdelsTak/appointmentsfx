@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -100,6 +101,19 @@ public class DatabaseSettingsPaneController {
                         () -> databaseConnectionService.getDatabaseConnectionStatusProperty().get() == DatabaseConnectionStatus.FAILED,
                         databaseConnectionService.getDatabaseConnectionStatusProperty())
                 );
+
+        connectionAttemptProgress.visibleProperty().bind(databaseConnectionService.runningProperty());
+        connectionErrorStatusLabel.textProperty().bind(databaseConnectionService.messageProperty());
+        connectionErrorStatusLabel.visibleProperty().bind(saveConnectionSettingsButton.disableProperty());
+    }
+
+    @FXML
+    protected void testDatabaseConnection(ActionEvent event) {
+        databaseConnectionService.setDatabaseURL(databaseURLTextField.getText());
+        databaseConnectionService.setUsername(userNameTextField.getText());
+        var password = passwordTextField.getText();
+        databaseConnectionService.setPassword(password == null ? new char[]{} : password.toCharArray());
+        databaseConnectionService.restart();
     }
 
     private void updateURL(String hostName, String databaseName) {
