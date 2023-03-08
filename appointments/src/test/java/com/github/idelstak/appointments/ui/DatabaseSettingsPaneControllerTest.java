@@ -136,26 +136,61 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
         doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
         doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
         doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("bad-password");
-        
+
         clickOn("#testConnectionButton", MouseButton.PRIMARY);
 
         var connectionErrorStatusLabel = (Labeled) sleep(3_000L).lookup("#connectionErrorStatusLabel").query();
 
         Assertions.assertThat(connectionErrorStatusLabel).isVisible();
     }
-    
+
     @Test
-    public void connection_error_label_is_hidden_when_connection_test_fails() throws Exception {
+    public void connection_error_label_is_hidden_when_connection_test_succeeds() throws Exception {
         doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
         doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
         doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
         doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("password");
-        
+
         clickOn("#testConnectionButton", MouseButton.PRIMARY);
 
         var connectionErrorStatusLabel = (Labeled) sleep(3_000L).lookup("#connectionErrorStatusLabel").query();
 
         Assertions.assertThat(connectionErrorStatusLabel).matches(node -> !node.isVisible());
+    }
+    
+    @Test
+    public void save_settings_button_is_disabled_when_pane_is_first_opened() throws Exception {
+        var saveConnectionSettingsButton = lookup("#saveConnectionSettingsButton").query();
+
+        Assertions.assertThat(saveConnectionSettingsButton).isDisabled();
+    }
+    
+    @Test
+    public void save_settings_button_is_disabled_when_connection_test_fails() throws Exception {
+        doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
+        doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
+        doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
+        doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("bad-password");
+
+        clickOn("#testConnectionButton", MouseButton.PRIMARY);
+
+        var saveConnectionSettingsButton = sleep(3_000L).lookup("#saveConnectionSettingsButton").query();
+
+        Assertions.assertThat(saveConnectionSettingsButton).isDisabled();
+    }
+    
+    @Test
+    public void save_settings_button_is_enabled_when_connection_test_succeeds() throws Exception {
+        doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
+        doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("client_schedule");
+        doubleClickOn("#userNameTextField", MouseButton.PRIMARY).write("admin");
+        doubleClickOn("#passwordTextField", MouseButton.PRIMARY).write("password");
+
+        clickOn("#testConnectionButton", MouseButton.PRIMARY);
+
+        var saveConnectionSettingsButton = sleep(3_000L).lookup("#saveConnectionSettingsButton").query();
+
+        Assertions.assertThat(saveConnectionSettingsButton).isEnabled();
     }
 
     private static Parent createRoot() {
