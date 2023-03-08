@@ -84,12 +84,12 @@
             </Label>
          </children>
       </VBox>
-      <HBox alignment="CENTER_LEFT" layoutX="34.0" layoutY="323.0" maxWidth="1.7976931348623157E308" spacing="12.0">
+      <HBox alignment="CENTER" layoutX="34.0" layoutY="323.0" maxWidth="1.7976931348623157E308" spacing="12.0">
          <children>
-            <Button fx:id="saveConnectionSettingsButton" mnemonicParsing="false" text="Save Connection Settings" />
+            <Button fx:id="saveConnectionSettingsButton" defaultButton="true" mnemonicParsing="false" text="Save Connection Settings" />
          </children>
          <padding>
-            <Insets bottom="12.0" top="12.0" />
+            <Insets bottom="12.0" top="24.0" />
          </padding>
       </HBox>
    </children>
