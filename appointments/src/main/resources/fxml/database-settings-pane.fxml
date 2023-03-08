@@ -72,7 +72,7 @@
       </HBox>
       <VBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
          <children>
-            <Label fx:id="connectionStatusLabel" maxWidth="1.7976931348623157E308">
+            <Label fx:id="connectionStatusLabel" maxWidth="1.7976931348623157E308" wrapText="true">
                <padding>
                   <Insets bottom="6.0" left="12.0" top="6.0" />
                </padding>
