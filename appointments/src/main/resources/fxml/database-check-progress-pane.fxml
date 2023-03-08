@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="databaseConnectionCheckPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="24.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 1.2em;" text="Starting Appointments" />
+      <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="6.0">
+         <children>
+            <Label fx:id="databaseConnectionStatusLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-weight: bold;" text="Checking database connection..." />
+            <StackPane>
+               <children>
+                  <Label fx:id="databaseConnectionErrorLabel" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="80.0" style="-fx-text-fill: red;" text="Label" wrapText="true" />
+                  <ProgressIndicator fx:id="databaseConnectionCheckProgressIndicator" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="80.0" progress="0.0" />
+               </children>
+               <padding>
+                  <Insets bottom="12.0" left="12.0" right="12.0" />
+               </padding>
+            </StackPane>
+         </children>
+      </VBox>
+      <Button fx:id="databaseSettingsButton" defaultButton="true" mnemonicParsing="false" onAction="#showDatabaseSettingsPane" text="Database Settings" />
+      <VBox layoutX="34.0" layoutY="34.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+   </children>
+   <padding>
+      <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+   </padding>
+</VBox>
