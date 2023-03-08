@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -102,11 +103,13 @@ public class DatabaseSettingsPaneController {
                         databaseConnectionService.getDatabaseConnectionStatusProperty())
                 );
 
-        connectionAttemptProgress.visibleProperty().bind(databaseConnectionService.runningProperty());
-        connectionAttemptProgress.progressProperty().bind(databaseConnectionService.progressProperty());
-        connectionStatusLabel.textProperty().bind(databaseConnectionService.titleProperty());
-        connectionErrorStatusLabel.textProperty().bind(databaseConnectionService.messageProperty());
-        connectionErrorStatusLabel.visibleProperty().bind(saveConnectionSettingsButton.disableProperty());
+        Platform.runLater(() -> {
+            connectionAttemptProgress.visibleProperty().bind(databaseConnectionService.runningProperty());
+            connectionAttemptProgress.progressProperty().bind(databaseConnectionService.progressProperty());
+            connectionStatusLabel.textProperty().bind(databaseConnectionService.titleProperty());
+            connectionErrorStatusLabel.textProperty().bind(databaseConnectionService.messageProperty());
+            connectionErrorStatusLabel.visibleProperty().bind(saveConnectionSettingsButton.disableProperty());
+        });
     }
 
     @FXML
@@ -116,6 +119,8 @@ public class DatabaseSettingsPaneController {
         var password = passwordTextField.getText();
         databaseConnectionService.setPassword(password == null ? new char[]{} : password.toCharArray());
         databaseConnectionService.restart();
+
+        event.consume();
     }
 
     private void updateURL(String hostName, String databaseName) {
