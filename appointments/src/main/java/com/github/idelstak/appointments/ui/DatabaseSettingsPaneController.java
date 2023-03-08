@@ -23,8 +23,14 @@
  */
 package com.github.idelstak.appointments.ui;
 
+import com.github.idelstak.appointments.database.DatabaseConnectionService;
+import com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus;
+import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,47 +41,101 @@ import javafx.scene.layout.VBox;
 
 public class DatabaseSettingsPaneController {
 
+    private static final Logger LOG = Logger.getLogger(DatabaseSettingsPaneController.class.getName());
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private ProgressIndicator connectionAttemptProgress;
-
     @FXML
     private Label connectionErrorStatusLabel;
-
     @FXML
     private Label connectionStatusLabel;
-
     @FXML
     private TextField databaseNameTextField;
-
     @FXML
     private VBox databaseSettingsPane;
-
     @FXML
     private TextField databaseURLTextField;
-
     @FXML
     private TextField hostTextField;
-
     @FXML
     private PasswordField passwordTextField;
-
     @FXML
     private Button saveConnectionSettingsButton;
-
     @FXML
     private Button testConnectionButton;
-
     @FXML
     private TextField userNameTextField;
+    private final DatabaseConnectionService databaseConnectionService;
+
+    public DatabaseSettingsPaneController(DatabaseConnectionService databaseConnectionService) {
+        this.databaseConnectionService = databaseConnectionService;
+    }
 
     @FXML
     protected void initialize() {
+        var url = databaseConnectionService.getDatabaseURL();
 
+        if (notNullAndMoreThanFiveLetters(url)) {
+            var uri = URI.create(url.substring(5));
+
+            logUri(uri);
+
+            hostTextField.setText(uri.getHost());
+            databaseNameTextField.setText(uri.getPath().substring(1));
+            databaseURLTextField.setText(url);
+        }
+
+        userNameTextField.setText(databaseConnectionService.getUsername());
+        passwordTextField.setText(new String(databaseConnectionService.getPassword()));
+
+        hostTextField.textProperty().addListener((o, ov, nv) -> updateURL(nv, databaseNameTextField.getText()));
+        databaseNameTextField.textProperty().addListener((o, ov, nv) -> updateURL(hostTextField.getText(), nv));
+
+        saveConnectionSettingsButton
+                .disableProperty()
+                .bind(Bindings.createBooleanBinding(
+                        () -> databaseConnectionService.getDatabaseConnectionStatusProperty().get() == DatabaseConnectionStatus.FAILED,
+                        databaseConnectionService.getDatabaseConnectionStatusProperty())
+                );
+    }
+
+    private void logUri(URI uri) {
+        LOG.log(
+                Level.INFO,
+                """
+                
+                authority: {0}; 
+                fragment: {1}; 
+                host: {2}; 
+                path: {3}; 
+                port: {4}; 
+                query: {5}; 
+                scheme: {6}; 
+                schemeSpecificPart: {7}; 
+                userInfo: {8}
+                """,
+                new Object[]{
+                    uri.getAuthority(),
+                    uri.getFragment(),
+                    uri.getHost(),
+                    uri.getPath(),
+                    Integer.toString(uri.getPort()),
+                    uri.getQuery(),
+                    uri.getScheme(),
+                    uri.getSchemeSpecificPart(),
+                    uri.getUserInfo()
+                }
+        );
+    }
+
+    private void updateURL(String hostName, String databaseName) {
+        databaseURLTextField.setText(String.format("jdbc:mysql://%s/%s", hostName, databaseName));
+    }
+
+    private static boolean notNullAndMoreThanFiveLetters(String text) {
+        return text != null && text.length() > 5;
     }
 }
