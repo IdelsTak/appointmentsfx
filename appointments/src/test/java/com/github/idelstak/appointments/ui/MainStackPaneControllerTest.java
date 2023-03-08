@@ -25,18 +25,22 @@ package com.github.idelstak.appointments.ui;
 
 import com.github.idelstak.appointments.database.DatabaseConnectionPreferences;
 import com.github.idelstak.appointments.database.DatabaseConnectionService;
+import com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import java.util.Objects;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class MainStackPaneControllerTest extends ApplicationWithSetStageTest {
 
+    private static final DatabaseConnectionService databaseConnectionService = new DatabaseConnectionService(new DatabaseConnectionPreferences());
+    private static final DisplayedView displayedView = new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE);
 
     public MainStackPaneControllerTest() {
         super(createRoot());
@@ -54,14 +58,22 @@ public class MainStackPaneControllerTest extends ApplicationWithSetStageTest {
         assertThat(databaseConnectionPaneIsVisible, is(true));
     }
 
+    @Test
+    public void shows_signInPane_when_database_connection_is_successful() throws Exception {
+        var databaseConnectionStatusProperty = databaseConnectionService.getDatabaseConnectionStatusProperty();
+
+        databaseConnectionStatusProperty.set(DatabaseConnectionStatus.SUCCESSFUL);
+        
+        assertThat(displayedView.getDisplayedPaneProperty().get(), equalTo(DisplayedPane.SIGN_IN_PANE));
+    }
+
     private static Parent createRoot() {
         var fxmlPath = "/fxml/main-stack-pane.fxml";
         var controller = new MainStackPaneController(
-                new DatabaseConnectionService(new DatabaseConnectionPreferences()),
-                new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE)
-        );
+                databaseConnectionService, displayedView);
 
         return (Parent) FxmlWithControllerLoader.load(fxmlPath, controller);
     }
+    
 
 }
