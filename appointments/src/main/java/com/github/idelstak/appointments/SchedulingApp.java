@@ -23,17 +23,37 @@
  */
 package com.github.idelstak.appointments;
 
+import com.github.idelstak.appointments.database.DatabaseConnectionPreferences;
+import com.github.idelstak.appointments.database.DatabaseConnectionService;
+import com.github.idelstak.appointments.database.DisplayedView;
+import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
+import com.github.idelstak.appointments.ui.FxmlWithControllerLoader;
+import com.github.idelstak.appointments.ui.MainStackPaneController;
+import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SchedulingApp extends Application {
+
+    private static final Logger LOG = Logger.getLogger(SchedulingApp.class.getName());
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage stage) throws Exception {
+        var mainStackPane = (Parent) FxmlWithControllerLoader.load(
+                "/fxml/main-stack-pane.fxml",
+                new MainStackPaneController(new DatabaseConnectionService(new DatabaseConnectionPreferences()), new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE))
+        );
+        var scene = new Scene(mainStackPane);
+
+        stage.setScene(scene);
+        stage.show();
+        stage.setMaximized(true);
     }
 
 }
