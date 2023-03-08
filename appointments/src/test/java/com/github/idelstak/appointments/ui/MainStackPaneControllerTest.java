@@ -28,6 +28,9 @@ import com.github.idelstak.appointments.database.DatabaseConnectionService;
 import com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
+import com.github.idelstak.appointments.signin.Credentials;
+import com.github.idelstak.appointments.signin.SignInService;
+import java.util.List;
 import java.util.Objects;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -39,8 +42,15 @@ import org.junit.Test;
 
 public class MainStackPaneControllerTest extends ApplicationWithSetStageTest {
 
-    private static final DatabaseConnectionService databaseConnectionService = new DatabaseConnectionService(new DatabaseConnectionPreferences());
-    private static final DisplayedView displayedView = new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE);
+    private static final DatabaseConnectionService DATABASE_CONNECTION_SERVICE;
+    private static final SignInService SIGN_IN_SERVICE;
+    private static final DisplayedView DISPLAYED_VIEW;
+
+    static {
+        DATABASE_CONNECTION_SERVICE = new DatabaseConnectionService(new DatabaseConnectionPreferences());
+        SIGN_IN_SERVICE = new SignInService(List.of(new Credentials("admin", "admin".toCharArray())));
+        DISPLAYED_VIEW = new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE);
+    }
 
     public MainStackPaneControllerTest() {
         super(createRoot());
@@ -60,20 +70,22 @@ public class MainStackPaneControllerTest extends ApplicationWithSetStageTest {
 
     @Test
     public void shows_signInPane_when_database_connection_is_successful() throws Exception {
-        var databaseConnectionStatusProperty = databaseConnectionService.getDatabaseConnectionStatusProperty();
+        var databaseConnectionStatusProperty = DATABASE_CONNECTION_SERVICE.getDatabaseConnectionStatusProperty();
 
         databaseConnectionStatusProperty.set(DatabaseConnectionStatus.SUCCESSFUL);
-        
-        assertThat(displayedView.getDisplayedPaneProperty().get(), equalTo(DisplayedPane.SIGN_IN_PANE));
+
+        assertThat(DISPLAYED_VIEW.getPane(), equalTo(DisplayedPane.SIGN_IN_PANE));
     }
 
     private static Parent createRoot() {
         var fxmlPath = "/fxml/main-stack-pane.fxml";
         var controller = new MainStackPaneController(
-                databaseConnectionService, displayedView);
+                DATABASE_CONNECTION_SERVICE,
+                SIGN_IN_SERVICE,
+                DISPLAYED_VIEW
+        );
 
         return (Parent) FxmlWithControllerLoader.load(fxmlPath, controller);
     }
-    
 
 }
