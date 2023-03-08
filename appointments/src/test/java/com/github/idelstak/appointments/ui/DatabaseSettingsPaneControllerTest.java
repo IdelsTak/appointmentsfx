@@ -31,6 +31,7 @@ import java.util.prefs.Preferences;
 import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseButton;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -128,6 +129,15 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
         var connectionAttemptProgress = (Control) lookup("#connectionAttemptProgress").query();
 
         Assertions.assertThat(connectionAttemptProgress).isVisible();
+    }
+    
+    @Test
+    public void connection_test_progress_becomes_indeterminate_when_connection_test_starts() throws Exception {
+        clickOn("#testConnectionButton", MouseButton.PRIMARY);
+
+        var connectionAttemptProgress = (ProgressIndicator) lookup("#connectionAttemptProgress").query();
+
+        assertThat(connectionAttemptProgress.isIndeterminate(), is(true));
     }
 
     @Test
