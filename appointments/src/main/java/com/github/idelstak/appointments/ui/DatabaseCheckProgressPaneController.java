@@ -27,6 +27,7 @@ import com.github.idelstak.appointments.database.DatabaseConnectionService;
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,19 +56,21 @@ public class DatabaseCheckProgressPaneController {
 
     @FXML
     protected void initialize() {
-        databaseConnectionStatusLabel.textProperty().bind(databaseConnectionService.titleProperty());
-        databaseConnectionCheckProgressIndicator.progressProperty().bind(databaseConnectionService.progressProperty());
-        databaseConnectionCheckProgressIndicator.visibleProperty().bind(databaseConnectionService.runningProperty());
-        databaseConnectionErrorLabel.visibleProperty().bind(databaseConnectionService.runningProperty().not());
-        databaseConnectionErrorLabel.textProperty().bind(databaseConnectionService.messageProperty());
-        databaseSettingsButton.visibleProperty().bind(
-                Bindings.createBooleanBinding(
-                        () -> databaseConnectionErrorLabel.getText() != null && !databaseConnectionErrorLabel.getText().isBlank(),
-                        databaseConnectionErrorLabel.textProperty()
-                )
-        );
+        Platform.runLater(() -> {
+            databaseConnectionStatusLabel.textProperty().bind(databaseConnectionService.titleProperty());
+            databaseConnectionCheckProgressIndicator.progressProperty().bind(databaseConnectionService.progressProperty());
+            databaseConnectionCheckProgressIndicator.visibleProperty().bind(databaseConnectionService.runningProperty());
+            databaseConnectionErrorLabel.visibleProperty().bind(databaseConnectionService.runningProperty().not());
+            databaseConnectionErrorLabel.textProperty().bind(databaseConnectionService.messageProperty());
+            databaseSettingsButton.visibleProperty().bind(
+                    Bindings.createBooleanBinding(
+                            () -> databaseConnectionErrorLabel.getText() != null && !databaseConnectionErrorLabel.getText().isBlank(),
+                            databaseConnectionErrorLabel.textProperty()
+                    )
+            );
 
-        databaseConnectionService.start();
+            databaseConnectionService.restart();
+        });
     }
 
     @FXML
