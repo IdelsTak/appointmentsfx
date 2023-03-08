@@ -63,7 +63,7 @@
       </VBox>
       <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="12.0">
          <children>
-            <Button fx:id="testConnectionButton" mnemonicParsing="false" text="Test Connection" />
+            <Button fx:id="testConnectionButton" mnemonicParsing="false" onAction="#testDatabaseConnection" text="Test Connection" />
             <ProgressIndicator fx:id="connectionAttemptProgress" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" progress="0.0" visible="false" />
          </children>
          <padding>
