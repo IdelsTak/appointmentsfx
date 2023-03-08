@@ -23,15 +23,40 @@
  */
 package com.github.idelstak.appointments.database;
 
+import static com.github.idelstak.appointments.database.DatabaseConnectionService.DatabaseConnectionStatus.FAILED;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public class DatabaseConnectionService extends Service<Void> {
 
+    public enum DatabaseConnectionStatus {
+        SUCCESSFUL, FAILED;
+    }
+
+    private final ObjectProperty<DatabaseConnectionStatus> databaseConnectionStatusProperty;
     private final DatabaseConnectionPreferences databaseConnectionPreferences;
 
     public DatabaseConnectionService(DatabaseConnectionPreferences databaseConnectionPreferences) {
+        databaseConnectionStatusProperty = new SimpleObjectProperty<>(FAILED);
         this.databaseConnectionPreferences = databaseConnectionPreferences;
+    }
+
+    public ObjectProperty<DatabaseConnectionStatus> getDatabaseConnectionStatusProperty() {
+        return databaseConnectionStatusProperty;
+    }
+
+    public String getDatabaseURL() {
+        return databaseConnectionPreferences.getDatabaseURL();
+    }
+
+    public String getUsername() {
+        return databaseConnectionPreferences.getUsername();
+    }
+
+    public char[] getPassword() {
+        return databaseConnectionPreferences.getPassword();
     }
 
     @Override
