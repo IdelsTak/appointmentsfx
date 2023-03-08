@@ -58,10 +58,20 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
+        var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath());
 
         mainStackPane
                 .getChildren()
-                .addAll(checkDatabaseProgressPane, databaseSettingsPane);
+                .addAll(checkDatabaseProgressPane, databaseSettingsPane, signInPane);
+
+        var databaseConnectionStatusProperty = databaseConnectionService.getDatabaseConnectionStatusProperty();
+
+        databaseConnectionStatusProperty
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue == DatabaseConnectionService.DatabaseConnectionStatus.SUCCESSFUL) {
+                        displayedView.getDisplayedPaneProperty().set(DisplayedPane.SIGN_IN_PANE);
+                    }
+                });
 
         displayedView
                 .getDisplayedPaneProperty()
@@ -76,12 +86,9 @@ public class MainStackPaneController {
         mainStackPane
                 .getChildrenUnmodifiable()
                 .stream()
-                .forEach(node -> node.setVisible(false));
-
-        mainStackPane
-                .getChildrenUnmodifiable()
-                .stream()
-                .filter(node -> Objects.equals(node.getId(), displayedPane.getPaneId()))
-                .forEach(node -> node.setVisible(true));
+                .forEach(node -> {
+                    var idsMatch = Objects.equals(node.getId(), displayedPane.getPaneId());
+                    node.setVisible(idsMatch);
+                });
     }
 }
