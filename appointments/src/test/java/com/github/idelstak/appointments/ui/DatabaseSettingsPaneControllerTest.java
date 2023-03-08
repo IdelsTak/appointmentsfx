@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.prefs.Preferences;
 import javafx.scene.Parent;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.MouseButton;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
 
         assertThat(databaseNameTextField.getText(), equalTo(uri.getPath().substring(1)));
     }
-    
+
     @Test
     public void databaseUrl_field_shows_databaseUrl_database_connection_preference() throws Exception {
         var databaseURLTextField = (TextInputControl) lookup("#databaseURLTextField").query();
@@ -51,7 +52,7 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
 
         assertThat(databaseURLTextField.getText(), equalTo(url));
     }
-    
+
     @Test
     public void username_field_shows_username_database_connection_preference() throws Exception {
         var userNameTextField = (TextInputControl) lookup("#userNameTextField").query();
@@ -59,13 +60,25 @@ public class DatabaseSettingsPaneControllerTest extends ApplicationWithSetStageT
 
         assertThat(userNameTextField.getText(), equalTo(username));
     }
-    
+
     @Test
     public void password_field_shows_password_database_connection_preference() throws Exception {
         var passwordTextField = (TextInputControl) lookup("#passwordTextField").query();
         var password = new String(databaseConnectionPreferences.getPassword());
 
         assertThat(passwordTextField.getText(), equalTo(password));
+    }
+
+    @Test
+    public void typing_in_hostName_and_databaseName_fields_updates_databaseUrl_field() throws Exception {
+        doubleClickOn("#hostTextField", MouseButton.PRIMARY).write("127.0.0.1");
+        doubleClickOn("#databaseNameTextField", MouseButton.PRIMARY).write("sample");
+
+        var hostTextField = (TextInputControl) lookup("#hostTextField").query();
+        var databaseNameTextField = (TextInputControl) lookup("#databaseNameTextField").query();
+        var databaseURLTextField = (TextInputControl) lookup("#databaseURLTextField").query();
+
+        assertThat(databaseURLTextField.getText(), equalTo(String.format("jdbc:mysql://%s/%s", hostTextField.getText(), databaseNameTextField.getText())));
     }
 
     private static Parent createRoot() {
