@@ -43,11 +43,12 @@ public class SignInPaneController {
 
     @FXML
     protected void initialize() {
-
+        signInErrorLabel.setVisible(false);
+        signInProgressIndicator.setVisible(false);
     }
 
     @FXML
     protected void signIn(ActionEvent event) {
-
+        signInProgressIndicator.setVisible(true);
     }
 }
