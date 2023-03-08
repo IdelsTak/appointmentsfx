@@ -103,6 +103,7 @@ public class DatabaseSettingsPaneController {
                 );
 
         connectionAttemptProgress.visibleProperty().bind(databaseConnectionService.runningProperty());
+        connectionAttemptProgress.progressProperty().bind(databaseConnectionService.progressProperty());
         connectionErrorStatusLabel.textProperty().bind(databaseConnectionService.messageProperty());
         connectionErrorStatusLabel.visibleProperty().bind(saveConnectionSettingsButton.disableProperty());
     }
