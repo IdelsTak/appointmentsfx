@@ -61,16 +61,16 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
-        var signInPaneController = new SignInPaneController(new SignInService(List.of(new Credentials("admin", "admin".toCharArray()))));
+        var signInService = new SignInService(List.of(new Credentials("admin", "admin".toCharArray())));
+        var signInPaneController = new SignInPaneController(signInService);
         var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
 
         mainStackPane
                 .getChildren()
                 .addAll(checkDatabaseProgressPane, databaseSettingsPane, signInPane);
 
-        var databaseConnectionStatusProperty = databaseConnectionService.getDatabaseConnectionStatusProperty();
-
-        databaseConnectionStatusProperty
+        databaseConnectionService
+                .getDatabaseConnectionStatusProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue == DatabaseConnectionService.DatabaseConnectionStatus.SUCCESSFUL) {
                         displayedView.getDisplayedPaneProperty().set(DisplayedPane.SIGN_IN_PANE);
