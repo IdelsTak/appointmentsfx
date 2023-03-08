@@ -1,0 +1,34 @@
+.navigation-bar {
+    -fx-background-color: #e3e4e6;
+}
+
+.radio-button > .radio,
+.radio-button:focused > .radio  {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-alignment: center-left;
+}
+
+.radio-button > .radio > .dot,
+.radio-button:selected > .radio > .dot {
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+}
+
+.radio-button {
+    -fx-label-padding: 0;
+    -fx-cursor: hand;
+}
+
+.radio-button:hover {
+    -fx-background-color: #c4c5c9;
+}
+
+.radio-button:selected {
+    -fx-background-color: #657187;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
