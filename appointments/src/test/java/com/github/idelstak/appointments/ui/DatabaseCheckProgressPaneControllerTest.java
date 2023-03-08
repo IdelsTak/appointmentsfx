@@ -36,6 +36,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
+import org.testfx.util.WaitForAsyncUtils;
 
 public class DatabaseCheckProgressPaneControllerTest extends ApplicationWithSetStageTest {
 
@@ -47,7 +48,7 @@ public class DatabaseCheckProgressPaneControllerTest extends ApplicationWithSetS
         databaseConnectionPreferences.setUsername("abcd");
         databaseConnectionPreferences.setPassword("password".toCharArray());
         databaseConnectionPreferences.setDatabaseURL("jdbc:mysql://localhost:3306/client_schedule");
-        
+
         displayedView = new DisplayedView(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE);
     }
 
@@ -57,33 +58,24 @@ public class DatabaseCheckProgressPaneControllerTest extends ApplicationWithSetS
 
     @Test
     public void shows_error_message_when_database_connection_fails_on_start() throws Exception {
-        var databaseConnectionErrorLabel = (Labeled) lookup("#databaseConnectionErrorLabel").query();
-
-        sleep(3_000L);
+        var databaseConnectionErrorLabel = (Labeled) sleep(3_000L).lookup("#databaseConnectionErrorLabel").query();
 
         assertThat(databaseConnectionErrorLabel.getText(), notNullValue());
     }
 
     @Test
     public void shows_database_settings_button_when_connection_fails_on_start() throws Exception {
-        var databaseSettingsButton = lookup("#databaseSettingsButton").query();
-
-        sleep(3_000L);
+        var databaseSettingsButton = sleep(3_000L).lookup("#databaseSettingsButton").query();
 
         assertThat(databaseSettingsButton.isVisible(), is(true));
     }
-    
+
     @Test
     public void clicking_database_settings_button_opens_the_database_settings_pane() throws Exception {
-        var databaseSettingsButton = lookup("#databaseSettingsButton").query();
+        sleep(3_000L).clickOn("#databaseSettingsButton", MouseButton.PRIMARY);
 
-        sleep(3_000L);
-        
-        clickOn(databaseSettingsButton, MouseButton.PRIMARY);
-        
         assertThat(displayedView.getDisplayedPaneProperty().get(), equalTo(DisplayedPane.DATABASE_SETTINGS_PANE));
     }
-    
 
     private static Parent createRoot() {
         var fxmlPath = DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath();
