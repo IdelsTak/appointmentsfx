@@ -52,8 +52,9 @@ public class SchedulingApp extends Application {
         var scene = new Scene(mainStackPane);
 
         stage.setScene(scene);
-        stage.show();
         stage.setMaximized(true);
+        stage.setTitle("AppointmentsFX");
+        stage.show();
     }
 
 }
