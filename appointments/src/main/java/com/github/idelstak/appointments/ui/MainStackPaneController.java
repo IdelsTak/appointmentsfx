@@ -56,7 +56,7 @@ public class MainStackPaneController {
     protected void initialize() throws IOException {
         var databaseCheckProgressPaneController = new DatabaseCheckProgressPaneController(databaseConnectionService, displayedView);
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
-        var databaseSettingsPaneController = new DatabaseSettingsPaneController();
+        var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
 
         mainStackPane
