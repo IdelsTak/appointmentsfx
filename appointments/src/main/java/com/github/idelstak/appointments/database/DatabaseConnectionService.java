@@ -36,18 +36,8 @@ public class DatabaseConnectionService extends Service<Void> {
 
     private static final Logger LOG = Logger.getLogger(DatabaseConnectionService.class.getName());
 
-    public enum DatabaseConnectionStatus {
-        SUCCESSFUL, FAILED;
-    }
-
-    private final ObjectProperty<DatabaseConnectionStatus> databaseConnectionStatusProperty;
-    private final DatabaseConnectionPreferences databaseConnectionPreferences;
-    private final DatabaseConnectionTask databaseConnectionTask;
-
-    public DatabaseConnectionService(DatabaseConnectionPreferences databaseConnectionPreferences) {
-        this.databaseConnectionPreferences = databaseConnectionPreferences;
-        databaseConnectionTask = new DatabaseConnectionTask();
-        databaseConnectionStatusProperty = new SimpleObjectProperty<>(FAILED);
+    private Task<Void> createDatabaseConnectionTask() {
+        var databaseConnectionTask = new DatabaseConnectionTask();
 
         databaseConnectionTask
                 .messageProperty()
@@ -58,6 +48,20 @@ public class DatabaseConnectionService extends Service<Void> {
                         databaseConnectionStatusProperty.setValue(FAILED);
                     }
                 });
+
+        return databaseConnectionTask;
+    }
+
+    public enum DatabaseConnectionStatus {
+        SUCCESSFUL, FAILED;
+    }
+
+    private final ObjectProperty<DatabaseConnectionStatus> databaseConnectionStatusProperty;
+    private final DatabaseConnectionPreferences databaseConnectionPreferences;
+
+    public DatabaseConnectionService(DatabaseConnectionPreferences databaseConnectionPreferences) {
+        this.databaseConnectionPreferences = databaseConnectionPreferences;
+        databaseConnectionStatusProperty = new SimpleObjectProperty<>(FAILED);
     }
 
     public ObjectProperty<DatabaseConnectionStatus> getDatabaseConnectionStatusProperty() {
@@ -90,7 +94,7 @@ public class DatabaseConnectionService extends Service<Void> {
 
     @Override
     protected Task<Void> createTask() {
-        return databaseConnectionTask;
+        return createDatabaseConnectionTask();
     }
 
     private class DatabaseConnectionTask extends Task<Void> {
