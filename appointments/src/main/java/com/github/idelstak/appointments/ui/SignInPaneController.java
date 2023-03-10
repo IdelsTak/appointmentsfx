@@ -28,6 +28,7 @@ import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignInService;
 import com.github.idelstak.appointments.signin.SignInService.SignInStatus;
+import com.github.idelstak.appointments.signin.SignedIn;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -64,10 +65,12 @@ public class SignInPaneController {
 
     private final SignInService signInService;
     private final DisplayedView displayedView;
+    private final SignedIn signedIn;
 
-    public SignInPaneController(SignInService signInService, DisplayedView displayedView) {
+    public SignInPaneController(SignInService signInService, DisplayedView displayedView, SignedIn signedIn) {
         this.signInService = signInService;
         this.displayedView = displayedView;
+        this.signedIn = signedIn;
     }
 
     @FXML
@@ -94,6 +97,10 @@ public class SignInPaneController {
         signInService.setOnSucceeded(stateEvent -> {
             var optionalCredentials = (Optional<Credentials>) stateEvent.getSource().getValue();
 
+            signedIn
+                    .getCredentialsProperty()
+                    .setValue(optionalCredentials);
+            
             optionalCredentials
                     .ifPresent(credentials -> {
                         displayedView
