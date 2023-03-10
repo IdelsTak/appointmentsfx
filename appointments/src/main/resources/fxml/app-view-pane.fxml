@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane fx:id="appViewPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <StackPane fx:id="mainContentStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" />
@@ -42,7 +41,7 @@
                                 <Insets bottom="6.0" />
                             </padding>
                         </Label>
-                        <Button fx:id="logoutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Logout" />
+                        <Button fx:id="logoutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#logOut" text="Logout" />
                     </children>
                     <padding>
                         <Insets bottom="24.0" top="48.0" />
