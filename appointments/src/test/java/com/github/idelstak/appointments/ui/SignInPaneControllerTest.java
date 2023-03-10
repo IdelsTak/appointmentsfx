@@ -28,6 +28,7 @@ import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignInService;
 import com.github.idelstak.appointments.signin.SignInService.SignInStatus;
+import com.github.idelstak.appointments.signin.SignedIn;
 import java.util.List;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -107,7 +108,7 @@ public class SignInPaneControllerTest extends ApplicationWithSetStageTest {
 
     private static Parent createRoot() {
         var fxmlPath = DisplayedView.DisplayedPane.SIGN_IN_PANE.getFxmlPath();
-        var controller = new SignInPaneController(SIGN_IN_SERVICE, DISPLAYED_VIEW);
+        var controller = new SignInPaneController(SIGN_IN_SERVICE, DISPLAYED_VIEW, new SignedIn());
 
         return (Parent) FxmlWithControllerLoader.load(fxmlPath, controller);
     }
