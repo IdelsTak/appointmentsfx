@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane fx:id="appViewPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <StackPane fx:id="mainContentStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" />
+   </center>
+   <left>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" styleClass="navigation-bar" stylesheets="@../styles/navigation-bar.css" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" style="-fx-font-size: 1.4em; -fx-font-weight: bold; -fx-text-fill: #657187;" text="Scheduler" />
+                <VBox spacing="12.0">
+                    <children>
+                        <RadioButton fx:id="customersRadioButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Customers">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="navigationButtonsGroup" />
+                            </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="appointmentsRadioButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Appointments" toggleGroup="$navigationButtonsGroup" />
+                        <RadioButton fx:id="reportsRadioButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Reports" toggleGroup="$navigationButtonsGroup" />
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                    <padding>
+                        <Insets top="18.0" />
+                    </padding>
+                </VBox>
+                <VBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="loggedInUsenameLabel" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-weight: bold;" text="Label">
+                            <padding>
+                                <Insets bottom="6.0" />
+                            </padding>
+                        </Label>
+                        <Button fx:id="logoutButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Logout" />
+                    </children>
+                    <padding>
+                        <Insets bottom="24.0" top="48.0" />
+                    </padding>
+                </VBox>
+            </children>
+            <padding>
+                <Insets left="6.0" right="12.0" />
+            </padding>
+        </VBox>
+   </left>
+   <top>
+      <Label fx:id="headerLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" style="-fx-font-weight: bold; -fx-background-color: #e3e4e6; -fx-text-fill: #657187; -fx-font-size: 1.1em; -fx-border-color: transparent transparent #c4c5c9 transparent;" styleClass="header-bar" text="Header" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>
