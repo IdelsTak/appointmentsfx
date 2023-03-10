@@ -1,11 +1,14 @@
 package com.github.idelstak.appointments.ui;
 
+import com.github.idelstak.appointments.database.DisplayedView;
+import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.Credentials;
 import com.github.idelstak.appointments.signin.SignedIn;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,9 +43,11 @@ public class AppViewPaneController {
     @FXML
     private RadioButton reportsRadioButton;
     private final SignedIn signedIn;
+    private final DisplayedView displayedView;
 
-    public AppViewPaneController(SignedIn signedIn) {
+    public AppViewPaneController(SignedIn signedIn, DisplayedView displayedView) {
         this.signedIn = signedIn;
+        this.displayedView = displayedView;
     }
 
     @FXML
@@ -56,5 +61,11 @@ public class AppViewPaneController {
                         },
                         signedIn.getCredentialsProperty()
                 ));
+    }
+
+    @FXML
+    protected void logOut(ActionEvent event) {
+        displayedView.setPane(DisplayedPane.SIGN_IN_PANE);
+        event.consume();
     }
 }
