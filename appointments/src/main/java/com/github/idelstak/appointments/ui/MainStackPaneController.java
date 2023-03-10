@@ -69,7 +69,7 @@ public class MainStackPaneController {
         var signedIn = new SignedIn();
         var signInPaneController = new SignInPaneController(signInService, displayedView, signedIn);
         var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
-        var appViewPaneController  = new AppViewPaneController(signedIn);
+        var appViewPaneController  = new AppViewPaneController(signedIn, displayedView);
         var appViewPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.APP_VIEW_PANE.getFxmlPath(), appViewPaneController);
 
         mainStackPane
