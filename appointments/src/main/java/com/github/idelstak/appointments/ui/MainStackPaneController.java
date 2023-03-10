@@ -28,6 +28,7 @@ import com.github.idelstak.appointments.database.DatabaseConnectionService.Datab
 import com.github.idelstak.appointments.database.DisplayedView;
 import com.github.idelstak.appointments.database.DisplayedView.DisplayedPane;
 import com.github.idelstak.appointments.signin.SignInService;
+import com.github.idelstak.appointments.signin.SignedIn;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -65,9 +66,11 @@ public class MainStackPaneController {
         var checkDatabaseProgressPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_CONNECTION_CHECK_PANE.getFxmlPath(), databaseCheckProgressPaneController);
         var databaseSettingsPaneController = new DatabaseSettingsPaneController(databaseConnectionService);
         var databaseSettingsPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.DATABASE_SETTINGS_PANE.getFxmlPath(), databaseSettingsPaneController);
-        var signInPaneController = new SignInPaneController(signInService, displayedView);
+        var signedIn = new SignedIn();
+        var signInPaneController = new SignInPaneController(signInService, displayedView, signedIn);
         var signInPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.SIGN_IN_PANE.getFxmlPath(), signInPaneController);
-        var appViewPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.APP_VIEW_PANE.getFxmlPath());
+        var appViewPaneController  = new AppViewPaneController(signedIn);
+        var appViewPane = (Node) FxmlWithControllerLoader.load(DisplayedPane.APP_VIEW_PANE.getFxmlPath(), appViewPaneController);
 
         mainStackPane
                 .getChildren()
