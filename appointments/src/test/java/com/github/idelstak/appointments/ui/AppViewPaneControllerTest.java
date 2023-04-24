@@ -40,8 +40,15 @@ public class AppViewPaneControllerTest extends ApplicationWithSetStageTest {
     @Test
     public void clicking_logoutButton_displays_signInPane() throws Exception {
         clickOn("#logoutButton", MouseButton.PRIMARY);
-        
+
         MatcherAssert.assertThat(DISPLAYED_VIEW.getPane(), CoreMatchers.equalTo(DisplayedPane.SIGN_IN_PANE));
+    }
+
+    @Test
+    public void shows_logoutConfirmation_when_logoutButton_clicked() throws Exception {
+        clickOn("#logoutButton", MouseButton.PRIMARY);
+        
+                
     }
 
     private static Parent createRoot() {
@@ -50,6 +57,5 @@ public class AppViewPaneControllerTest extends ApplicationWithSetStageTest {
 
         return (Parent) FxmlWithControllerLoader.load(fxmlPath, controller);
     }
-    
 
 }
